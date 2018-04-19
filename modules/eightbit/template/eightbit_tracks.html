@@ -1,0 +1,15 @@
+<div id="eightbit" class="eightbit">
+	<div style="float: right; margin: 13px; padding: 5px; width: auto; height: auto; clear: none;">
+		<img src="<{$xoops_url}>/modules/eightbit/assets/icons/speaker-256.png" />
+	</div>
+	<{includeq file="db:eightbit_breadcrumb.html"}>
+	<h1>tracks in the 8Bit Genre Collective</h1>
+	<p>This is the 8Bit Gaming Music tracks, it has a wide amount of imact as you as a musician will be able to find creative commons jingles and tunes here that are catchy and fast paced as well as down with the tempo, from here you will be able to select individual tracks after playing them to your email address, which send every 20 minutes!</p>
+	<{if count($alphatracks) > 0}>
+	<p>This is the browser to break into track's in the 8Bit Collective!</p>
+	<{includeq file="db:eightbit_alpha_tracks_grid.html"}>
+	<{/if}>
+	<h2>Tracks</h2>
+	<p>This is the breakdown list of tracks in the 8Bit Collective!</p>
+	<{includeq file="db:eightbit_artists_grid.html"}>
+</div>

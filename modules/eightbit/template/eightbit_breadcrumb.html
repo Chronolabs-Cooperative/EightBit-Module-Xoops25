@@ -1,0 +1,16 @@
+<{if count($breadcrumb) > 0}>
+	<div id="breadcrumb" class="breadcrumb">
+		<{foreach item=crumb from=$breadcrumb key=crumbkey}>
+		<div style="width: auto; height: auto; margin: 7px; padding: 4px; float: left; clear: none;">
+			<div id="crumb_char" class="crumb_char_<{$crumbkey}>">
+				<a href="<{$crumb.url}>"><{$crumb.chars}></a>
+			</div>
+		</div>
+		<{if $breadcrumb[$crumbkey] != $breadcrumb[count($breadcrumb) - 1]}>
+		<div id="crumb_spacer" class="crumb_spacer">
+			&nbsp;>>&nbsp;
+		</div>
+		<{/if}>
+		<{/foreach}>
+	</div>
+<{/if}>

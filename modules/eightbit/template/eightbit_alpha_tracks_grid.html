@@ -1,0 +1,14 @@
+<{if count($alphatracks) > 0}>
+	<div id="alpha_tracks" class="alpha_tracks">
+		<{foreach item=alpha from=$alphatracks key=alphakey}>
+		<div style="width: auto; height: auto; margin: 7px; padding: 4px; float: left;">
+			<div id="alpha_char" class="alpha_char_<{$alphakey}>">
+				<a href="<{$alpha.url}>"><{$alpha.chars}></a>&nbsp;<span id="alpha_tracks">(<{$alpha.tracks}>)</span>
+			</div>
+			<div id="alpha_playtime" class="alpha_playtime_<{$alphakey}>">
+				<{$alpha.playtime}>
+			</div>				
+		</div>
+		<{/foreach}>
+	</div>
+<{/if}>

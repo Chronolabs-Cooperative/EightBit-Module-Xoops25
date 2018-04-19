@@ -1,0 +1,28 @@
+<{if count($artists) > 0}>
+	<div style="float: right; width: auto; height: auto: padding: 15px;" id="pagenav" class="pagenav">
+		<{$pagenav}>
+	</div>
+	<table id="artists" class="artists">
+		<tr class="head">
+			<td style="text-align: center;"><a href="<{$server.php_self}>?sort=artistss&order=<{$order}>&<{$disgression}>">Artist<{if $sort=='artist'}>&nsbp;<{if $order=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?sort=albums&order=<{$order}>&<{$disgression}>">Albums<{if $sort=='albums'}>&nsbp;<{if $order=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?sort=tracks&order=<{$order}>&<{$disgression}>">Tracks<{if $sort=='tracks'}>&nsbp;<{if $order=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?sort=hits&order=<{$order}>&<{$disgression}>">Hits<{if $sort=='hits'}>&nsbp;<{if $order=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?sort=bytes&order=<{$order}>&<{$disgression}>">Bytes<{if $sort=='bytes'}>&nsbp;<{if $order=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?sort=totalseconds&order=<{$order}>&<{$disgression}>">Play Time<{if $sort=='totalseconds'}>&nsbp;<{if $order=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}><td>
+		</td>
+		<{foreach item=artist from=$artists}>
+		<tr class="<{cycle values='even,odd'}>">
+			<td style="text-align: left;"><a href="<{$artist.url}>"><{if strlen($artist.artist)==0}><em>Artist Name Undefined</em><{else}><{$artist.artist}><{/if}></a></td>
+			<td style="text-align: center;"><{$artist.albums}></td>
+			<td style="text-align: center;"><{$artist.tracks}></td>
+			<td style="text-align: center;"><{$artist.hits}></td>
+			<td style="text-align: center;"><{$artist.bytes}></td>
+			<td style="text-align: center;"><{$artist.playtime}></td>
+		</tr>
+		</foreach}>
+	</table>
+	<div style="float: left; width: auto; height: auto: padding: 15px;" id="pagenav" class="pagenav">
+		<{$pagenav}>
+	</div>
+<{/if}>
