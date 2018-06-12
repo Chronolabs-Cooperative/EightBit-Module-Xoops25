@@ -30,6 +30,9 @@ if (!$album = xoops_getModuleHandler('albums')->getByKey($_REQUEST['key']))
     exit(0);
 }
 
+$album->setVar('hits', $album->getVar('hits')+1);
+xoops_getModuleHandler('albums')->insert($album);
+
 $breadcrumb = array();
 $breadcrumb['home']['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/index.php";
 $breadcrumb['home']['chars'] = 'home';

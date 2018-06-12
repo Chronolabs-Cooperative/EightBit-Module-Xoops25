@@ -29,6 +29,9 @@ if (!$track = xoops_getModuleHandler('tracks')->getByKey($_REQUEST['key']))
     exit(0);
 }
 
+$track->setVar('hits', $track->getVar('hits')+1);
+xoops_getModuleHandler('tracks')->insert($track);
+
 $breadcrumb = array();
 $breadcrumb['home']['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/index.php";
 $breadcrumb['home']['chars'] = 'home';

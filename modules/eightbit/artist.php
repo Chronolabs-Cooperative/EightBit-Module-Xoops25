@@ -28,6 +28,9 @@ if (!$artist = xoops_getModuleHandler('artists')->getByKey($_REQUEST['key']))
     exit(0);
 }
 
+$artist->setVar('hits', $artist->getVar('hits')+1);
+xoops_getModuleHandler('artists')->insert($artist);
+
 $breadcrumb = array();
 $breadcrumb['home']['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/index.php";
 $breadcrumb['home']['chars'] = 'home';
