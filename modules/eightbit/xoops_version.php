@@ -110,6 +110,18 @@ $modversion['templates'][$i]['description']     = 'Tracks Display';
 
 // Menu
 $modversion['hasMain'] = 1;
+
+$modversion['sub'][1]['name'] = '8 Bit Albums';
+$modversion['sub'][1]['url']  = 'albums.php';
+$modversion['sub'][2]['name'] = '8 Bit Artists';
+$modversion['sub'][2]['url']  = 'artists.php';
+$modversion['sub'][3]['name'] = '8 Bit Tracks';
+$modversion['sub'][3]['url']  = 'tracks.php';
+$modversion['sub'][4]['name'] = 'Queued Emails';
+$modversion['sub'][4]['url']  = 'emails.php';
+$modversion['sub'][5]['name'] = '8 Bit Search';
+$modversion['sub'][5]['url']  = 'search.php';
+
 /*
 $modversion['config']   = array();
 $modversion['config'][] = array(

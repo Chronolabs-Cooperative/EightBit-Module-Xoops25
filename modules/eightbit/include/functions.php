@@ -16,6 +16,129 @@
  * @author              Simon Antony Roberts <wishcraft@users.sourceforge.net>
  */
 
+/**
+ * validateMD5()
+ * Validates an MD5 Checksum
+ *
+ * @param string $email
+ * @return boolean
+ */
+function eightbit_validateSHA1($sha1) {
+    if(preg_match("/^[a-f0-9]{40}$/i", $sha1)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * validateMD5()
+ * Validates an MD5 Checksum
+ *
+ * @param string $email
+ * @return boolean
+ */
+function eightbit_validateMD5($md5) {
+    if(preg_match("/^[a-f0-9]{32}$/i", $md5)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * validateEmail()
+ * Validates an Email Address
+ *
+ * @param string $email
+ * @return boolean
+ */
+function eightbit_validateEmail($email) {
+    if(preg_match("^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|mobi|asia|museum|name))$", $email)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * validateDomain()
+ * Validates a Domain Name
+ *
+ * @param string $domain
+ * @return boolean
+ */
+function eightbit_validateDomain($domain) {
+    if(!preg_match("/^([-a-z0-9]{2,100})\.([a-z\.]{2,8})$/i", $domain)) {
+        return false;
+    }
+    return $domain;
+}
+
+/**
+ * validateIPv4()
+ * Validates and IPv6 Address
+ *
+ * @param string $ip
+ * @return boolean
+ */
+function eightbit_validateIPv4($ip) {
+    if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE) === FALSE) // returns IP is valid
+    {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+/**
+ * validateIPv6()
+ * Validates and IPv6 Address
+ *
+ * @param string $ip
+ * @return boolean
+ */
+function eightbit_validateIPv6($ip) {
+    if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === FALSE) // returns IP is valid
+    {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+if (!function_exists("eightbit_getArtistsHTML")) {
+    
+    /* function eightbit_getURIData()
+     *
+     * 	Get a supporting domain system for the API
+     * @author 		Simon Roberts (Chronolabs) simon@labs.coop
+     *
+     * @return 		float()
+     */
+    function eightbit_getArtistsHTML($id = 0, $artist = '')
+    {
+        if (eightbit_validateSHA1($artist))
+        {
+            $return = array();
+            $criteria = new Criteria('artistid', $id);
+            foreach(xoops_getModuleHandler('artists_chaining')->getObjects($criteria, true) as $key => $object)
+                $return[] = "<a href='" . XOOPS_URL . "/modules/" . basename(dirname(__DIR__)) . "/artist.php?key=" . md5($object->getVar('childid')) . "'>".xoops_getModuleHandler('artists')->get($object->getVar('childid'))->getVar('artist')."</a>";
+            if (count($return) > 4) {
+                while(count($return) > 4)
+                {
+                    sort($return);
+                    unset($return[mt_rand(0, count($return) - 1)]);
+                }
+                $return[] = '...';
+            }
+            return implode(',&nbsp;', $return);
+        } else {
+            return "<a href='" . XOOPS_URL . "/modules/" . basename(dirname(__DIR__)) . "/artist.php?key=" . md5($id) . "'>$artist</a>";
+        }
+    }
+}
+
 if (!function_exists("eightbit_PlayerHTML")) {
     
     /* function eightbit_getURIData()

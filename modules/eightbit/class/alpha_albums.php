@@ -59,4 +59,9 @@ class EightbitAlpha_albumsHandler extends XoopsPersistableObjectHandler
     {
         return xoops_getModuleHandler('alpha', 'eightbit')->getIDsAlpha($alpha, 'album');
     }
+    
+    public function getCrumbs($alpha = '')
+    {
+        return xoops_getModuleHandler('alpha', 'eightbit')->getCrumbs($alpha, 'album');
+    }
 }

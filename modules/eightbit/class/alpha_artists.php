@@ -63,4 +63,10 @@ class EightbitAlpha_artistsHandler extends XoopsPersistableObjectHandler
     {
         return xoops_getModuleHandler('alpha', 'eightbit')->getIDsAlpha($alpha, 'artist');
     }
+    
+    
+    public function getCrumbs($alpha = '')
+    {
+        return xoops_getModuleHandler('alpha', 'eightbit')->getCrumbs($alpha, 'artist');
+    }
 }

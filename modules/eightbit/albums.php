@@ -22,6 +22,20 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'header.php';
 $xoopsOption['template_main'] = 'db:eightbit_albums.html';
 include_once dirname(dirname(__DIR__)) . DS . 'header.php';
 include_once dirname(dirname(__DIR__)) . DS . 'class' . DS . 'pagenav.php';
+
+
+$breadcrumb = array();
+$breadcrumb['home']['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/index.php";
+$breadcrumb['home']['chars'] = 'home';
+foreach(xoops_getModuleHandler('albums', basename(__DIR__))->getCrumbs($_REQUEST['albumalpha']) as $chars => $values)
+{
+    $breadcrumb[$chars]['chars'] = $chars;
+    $breadcrumb[$chars]['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/albums.php?albumalpha=" . $chars;
+}
+$crumbkeys = array_keys($breadcrumb);
+$GLOBALS['xoopsTpl']->assign('breadcrumb', $breadcrumb);
+$GLOBALS['xoopsTpl']->assign('lastcrumb', $crumbkeys[count($crumbkeys) - 1]);
+
 $totalseconds = 0;
 $alpha = array();
 if (strlen($_REQUEST['albumalpha'])<3)
@@ -29,7 +43,7 @@ if (strlen($_REQUEST['albumalpha'])<3)
     foreach(xoops_getModuleHandler('albums', basename(__DIR__))->selAlpha($_REQUEST['albumalpha']) as $chars => $values)
     {
         $alpha[$chars]['chars'] = $chars;
-        $alpha[$chars]['url'] = XOOPS_URL . ' /modules/' . basename(__DIR__) . "/albums.php?albumalpha=" . $chars;
+        $alpha[$chars]['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/albums.php?albumalpha=" . $chars;
         $alpha[$chars]['tracks'] = eightbit_secondsDiplay($values['totalseconds']);
         
     }
@@ -46,12 +60,12 @@ $criteria->setStart((isset($_REQUEST['albumstart'])?$_REQUEST['albumstart']:$GLO
 $criteria->setLimit((isset($_REQUEST['albumlimit'])?$_REQUEST['albumlimit']:$GLOBALS['limit']));
 foreach(xoops_getModuleHandler('albums', basename(__DIR__))->getObjects($criteria, true) as $key => $object) {
     $GLOBALS['xoopsTpl']->append('albums', array(   'album'     =>      $object->getVar('album'),
-                                                    'url' =>      XOOPS_URL . '/modules/' . basename(__DIR__) . '/album.php?key='.md5($object->getVar('id')),
-                                                    'artists'   =>      $object->getVar('artists'),
-                                                    'tracks'    =>      $object->getVar('tracks'),
-                                                    'bytes'     =>      $object->getVar('bytes'),
-                                                    'hits'      =>      $object->getVar('hits'),
-                                                    'playtime'  =>      eightbit_secondsDiplay($object->getVar('totalseconds'))));
+        'url'       =>      XOOPS_URL . '/modules/' . basename(__DIR__) . '/album.php?key='.md5($object->getVar('id')),
+        'artists'   =>      $object->getVar('artists'),
+        'tracks'    =>      $object->getVar('tracks'),
+        'bytes'     =>      $object->getVar('bytes'),
+        'hits'      =>      $object->getVar('hits'),
+        'playtime'  =>      eightbit_secondsDiplay($object->getVar('totalseconds'))));
 }
 $pagenav = new XoopsPageNav($ttl, (isset($_REQUEST['albumlimit'])?$_REQUEST['albumlimit']:$GLOBALS['limit']), (isset($_REQUEST['albumstart'])?$_REQUEST['albumstart']:$GLOBALS['start']), 'albumstart', 'albumalpha='.$_REQUEST['albumalpha'].'&albumlimit='.(isset($_REQUEST['albumlimit'])?$_REQUEST['albumlimit']:$GLOBALS['limit']).'&'.http_build_query(eightbit_RemoveFieldKeywords('album', parse_str($_SERVER['QUERY_STRING']))));
 $GLOBALS['xoopsTpl']->assign('albumspagenav', $pagenav->renderNav(7));
@@ -65,7 +79,7 @@ $artistsids = array();
 $criteria = new Criteria('albumid', '(' . implode(', ', $albumids) . ')', 'IN');
 foreach(xoops_getModuleHandler('albums_artists', basename(__DIR__))->getObjects($criteria, true) as $key => $object)
     $artistsids[$object->getVar('artistid')] = $object->getVar('artistid');
-    
+
 $criteria = new Criteria('id', '(' . implode(', ', array_keys($artistsids)) . ')', 'IN');
 $criteria->setSort((isset($_REQUEST['artistsort'])?$_REQUEST['artistsort']:$GLOBALS['sort']));
 $criteria->setOrder((isset($_REQUEST['artistorder'])?$_REQUEST['artistorder']:$GLOBALS['order']));
@@ -73,9 +87,8 @@ $ttl = xoops_getModuleHandler('albums', basename(__DIR__))->getCount($criteria);
 $criteria->setStart((isset($_REQUEST['artiststart'])?$_REQUEST['artiststart']:$GLOBALS['start']));
 $criteria->setLimit((isset($_REQUEST['artistlimit'])?$_REQUEST['artistlimit']:$GLOBALS['limit']));
 foreach(xoops_getModuleHandler('artists', basename(__DIR__))->getObjects($criteria, true) as $key => $object) {
-    $GLOBALS['xoopsTpl']->append('artists', array(   'artist'     =>      $object->getVar('artist'),
-        'url'    =>      XOOPS_URL . '/modules/' . basename(__DIR__) . '/artist.php?key='.md5($object->getVar('id')),
-        'albums'   =>      $object->getVar('albums'),
+    $GLOBALS['xoopsTpl']->append('artists', array(  'artist'    =>      eightbit_getArtistsHTML($object->getVar('id'), $object->getVar('artist')),
+        'albums'    =>      $object->getVar('albums'),
         'tracks'    =>      $object->getVar('tracks'),
         'bytes'     =>      $object->getVar('bytes'),
         'hits'      =>      $object->getVar('hits'),
@@ -102,18 +115,17 @@ $ttl = xoops_getModuleHandler('tracks', basename(__DIR__))->getCount($criteria);
 $criteria->setStart((isset($_REQUEST['trackstart'])?$_REQUEST['trackstart']:$GLOBALS['start']));
 $criteria->setLimit((isset($_REQUEST['tracklimit'])?$_REQUEST['tracklimit']:$GLOBALS['limit']));
 foreach(xoops_getModuleHandler('tracks', basename(__DIR__))->getObjects($criteria, true) as $key => $object) {
-    $GLOBALS['xoopsTpl']->append('tracks', array(   'title'     =>      $object->getVar('title'),
+    $GLOBALS['xoopsTpl']->append('tracks', array(   'title'         =>      $object->getVar('title'),
         'album'         =>      xoops_getModuleHandler('albums', basename(__DIR__))->get($object->getVar('albumid'))->getVar('album'),
-        'artist'        =>      xoops_getModuleHandler('artists', basename(__DIR__))->get($object->getVar('artistid'))->getVar('artist'),
+        'artist'        =>      eightbit_getArtistsHTML($object->getVar('artistid'), xoops_getModuleHandler('artists', basename(__DIR__))->get($object->getVar('artistid'))->getVar('artist')),
         'album_url'     =>      XOOPS_URL . '/modules/' . basename(__DIR__) . '/album.php?key='.md5($object->getVar('albumid')),
-        'artist_url'    =>      XOOPS_URL . '/modules/' . basename(__DIR__) . '/artist.php?key='.md5($object->getVar('artistid')),
         'track_url'     =>      XOOPS_URL . '/modules/' . basename(__DIR__) . '/track.php?key='.md5($object->getVar('artistid')),
         'year'          =>      $object->getVar('year'),
         'bitrate'       =>      number_format($object->getVar('bitrate')/ 1024, 0) . 'Kbs',
         'bytes'         =>      number_format($object->getVar('bytes'), 0),
         'hits'          =>      $object->getVar('hits'),
         'player'        =>      eightbit_PlayerHTML('player.swf', sprintf(xoops_getModuleHandler('repositories', basename(__DIR__))->get($object->getVar('repoid'))->getVar('raw'), substr($object->getVar('path'), 1) . "/" . urlencode($object->getVar('file')))),
-        'playseconds'      =>      eightbit_secondsDiplay($object->getVar('playseconds'))));
+        'playseconds'   =>      eightbit_secondsDiplay($object->getVar('playseconds'))));
 }
 $pagenav = new XoopsPageNav($ttl, (isset($_REQUEST['tracklimit'])?$_REQUEST['tracklimit']:$GLOBALS['limit']), (isset($_REQUEST['trackstart'])?$_REQUEST['trackstart']:$GLOBALS['start']), 'trackstart', 'albumalpha='.$_REQUEST['albumalpha'].'&tracklimit='.(isset($_REQUEST['tracklimit'])?$_REQUEST['tracklimit']:$GLOBALS['limit']).'&'.http_build_query(eightbit_RemoveFieldKeywords('track', parse_str($_SERVER['QUERY_STRING']))));
 $GLOBALS['xoopsTpl']->assign('trackspagenav', $pagenav->renderNav(7));
@@ -124,3 +136,5 @@ $GLOBALS['xoopsTpl']->assign('tracklimit', (isset($_REQUEST['tracklimit'])?$_REQ
 $GLOBALS['xoopsTpl']->assign('tracksdigression', http_build_query(eightbit_RemoveFieldKeywords('track', parse_str($_SERVER['QUERY_STRING']))));
 
 include_once dirname(dirname(__DIR__)) . DS . 'footer.php';
+
+?>

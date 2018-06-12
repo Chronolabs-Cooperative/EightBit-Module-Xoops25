@@ -291,16 +291,16 @@ class EightbitTracksHandler extends XoopsPersistableObjectHandler
                                 $GLOBALS['xoopsDB']->queryF($sql);
                             }
                         }
-                        $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_artists') . "` SET `tracks` = `tracks` + 1, `totalseconds` = `totalseconds` + '" . $object->getVar('playseconds') . "' WHERE `id` = '" . $object->getVar('artistid') . "'";
+                        $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_artists') . "` SET `tracks` = `tracks` + 1, `totalseconds` = `totalseconds` + '" . $object->getVar('playseconds') . "', `bytes` = `bytes` + '" . $object->getVar('bytes') . "' WHERE `id` = '" . $object->getVar('artistid') . "'";
                         $GLOBALS['xoopsDB']->queryF($sql);
-                        $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_albums') . "` SET `tracks` = `tracks` + 1, `totalseconds` = `totalseconds` + '" . $object->getVar('playseconds') . "' WHERE `id` = '" . $object->getVar('albumid') . "'";
+                        $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_albums') . "` SET `tracks` = `tracks` + 1, `totalseconds` = `totalseconds` + '" . $object->getVar('playseconds') . "', `bytes` = `bytes` + '" . $object->getVar('bytes') . "' WHERE `id` = '" . $object->getVar('albumid') . "'";
                         $GLOBALS['xoopsDB']->queryF($sql);
-                        $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` SET `tracks` = `tracks` + 1, `totalseconds` = `totalseconds` + '" . $object->getVar('playseconds') . "' WHERE `id` = '" . $trackalphaid . "'";
+                        $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` SET `tracks` = `tracks` + 1, `totalseconds` = `totalseconds` + '" . $object->getVar('playseconds') . "', `bytes` = `bytes` + '" . $object->getVar('bytes') . "' WHERE `id` = '" . $trackalphaid . "'";
                         $GLOBALS['xoopsDB']->queryF($sql);
-                        $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` SET `tracks` = `tracks` + 1, `totalseconds` = `totalseconds` + '" . $object->getVar('playseconds') . "' WHERE `id` = '" . $albumalphaid . "'";
+                        $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` SET `tracks` = `tracks` + 1, `totalseconds` = `totalseconds` + '" . $object->getVar('playseconds') . "', `bytes` = `bytes` + '" . $object->getVar('bytes') . "' WHERE `id` = '" . $albumalphaid . "'";
                         $GLOBALS['xoopsDB']->queryF($sql);
                         foreach($artistalphaid as $aaid) {
-                            $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` SET `tracks` = `tracks` + 1, `totalseconds` = `totalseconds` + '" . $object->getVar('playseconds') . "' WHERE `id` = '" . $aaid . "'";
+                            $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` SET `tracks` = `tracks` + 1, `totalseconds` = `totalseconds` + '" . $object->getVar('playseconds') . "', `bytes` = `bytes` + '" . $object->getVar('bytes') . "' WHERE `id` = '" . $aaid . "'";
                             $GLOBALS['xoopsDB']->queryF($sql);
                         }
                     }
@@ -323,4 +323,20 @@ class EightbitTracksHandler extends XoopsPersistableObjectHandler
         return xoops_getModuleHandler('alpha_tracks', 'eightbit')->getIDsAlpha($alpha);
     }
     
+    public function getCrumbs($alpha = '')
+    {    
+        return xoops_getModuleHandler('alpha_tracks', 'eightbit')->getCrumbs($alpha);
+    }
+    
+    public function getByKey($key = '')
+    {
+        $sql = "SELECT * FROM `" . $GLOBALS['xoopsDB']->prefix('8bit_tracks') . "` WHERE md5(`id`) LIKE '$key'";
+        if ($myrow = $GLOBALS['xoopsDB']->fetchArray($GLOBALS['xoopsDB']->queryF($sql)))
+        {
+            $obj = new EightbitTracks();
+            $obj->assignVars($myrow);
+            return $obj;
+        }
+        return false;
+    }
 }

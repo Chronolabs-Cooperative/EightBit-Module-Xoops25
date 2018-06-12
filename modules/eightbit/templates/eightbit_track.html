@@ -1,1 +1,17 @@
-<script>history.go(-1);</script>
+<div id="eightbit" class="eightbit">
+	<div style="float: right; margin: 13px; padding: 5px; width: auto; height: auto; clear: none;">
+		<img src="<{$xoops_url}>/modules/eightbit/assets/icons/speaker-256.png" />
+	</div>
+	<{includeq file="db:eightbit_breadcrumb.html"}>
+	<h1><{$track.title}></h1>
+	<p>This is the 8Bit Gaming Music track; <{$track.title}>!</p>
+	<p>
+		Album: <strong><{$track.album}></strong><br />
+		Artist(s): <strong><{$track.artist}></strong><br />
+		Bytes: <strong><{$track.bytes}></strong><br />
+		Play Time: <strong><{$track.playtime}></strong><br />
+		Year: <strong><{$track.year}></strong><br />
+		Bit-rate: <strong><{$track.bitrate}></strong><br />
+	</p>
+	<p style="text-align: center;"><{$track.player}></p>
+</div>

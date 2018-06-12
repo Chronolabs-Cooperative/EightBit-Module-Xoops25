@@ -229,6 +229,7 @@ foreach($repositories as $key => $repository)
                     } else {
                         die('Problem Inserting artist reference!');
                     }
+                    $artistids = array();
                 }
             }
         }
@@ -288,6 +289,8 @@ foreach($repositories as $key => $repository)
                 $trackobj->setVar('year', $track['year']);
                 $trackobj->setVar('minutes', $track['minutes']);
                 $trackobj->setVar('seconds', $track['seconds']);
+                $trackobj->setVar('bytes', $track['bytes']);
+                $trackobj->setVar('sha1', $track['sha1']);
                 $trackobj->setVar('bitrate', $track['bitrate']);
                 $trackobj->setVar('playseconds', $track['playseconds']);
                 if ($trackid = $tracks_handler->insert($trackobj, true)) {

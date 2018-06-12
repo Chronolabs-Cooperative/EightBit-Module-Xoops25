@@ -68,4 +68,21 @@ class EightbitArtistsHandler extends XoopsPersistableObjectHandler
         return xoops_getModuleHandler('alpha_artists', 'eightbit')->getIDsAlpha($alpha);
     }
     
+    public function getCrumbs($alpha = '')
+    {
+        
+        return xoops_getModuleHandler('alpha_artists', 'eightbit')->getCrumbs($alpha);
+    }
+    
+    public function getByKey($key = '')
+    {
+        $sql = "SELECT * FROM `" . $GLOBALS['xoopsDB']->prefix('8bit_artists') . "` WHERE md5(`id`) LIKE '$key'";
+        if ($myrow = $GLOBALS['xoopsDB']->fetchArray($GLOBALS['xoopsDB']->queryF($sql)))
+        {
+            $obj = new EightbitArtists();
+            $obj->assignVars($myrow);
+            return $obj;
+        }
+        return false;
+    }
 }

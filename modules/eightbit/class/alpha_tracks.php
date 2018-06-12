@@ -60,4 +60,9 @@ class EightbitAlpha_tracksHandler extends XoopsPersistableObjectHandler
     {
         return xoops_getModuleHandler('alpha', 'eightbit')->getIDsAlpha($alpha, 'track');
     }
+    
+    public function getCrumbs($alpha = '')
+    {
+        return xoops_getModuleHandler('alpha', 'eightbit')->getCrumbs($alpha, 'track');
+    }
 }

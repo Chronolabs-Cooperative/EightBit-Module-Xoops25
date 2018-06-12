@@ -58,3 +58,6 @@ $limit  	     = intval( empty($_REQUEST["limit"]) ? 13 : $_REQUEST["limit"] );
 $sort   	     = empty($_REQUEST["sort"]) ? "hits" : $_REQUEST["sort"] ;
 $order  	     = empty($_REQUEST["order"]) ? "DESC" : $_REQUEST["order"] ;
 $mode   	     = empty($_REQUEST["mode"]) ? "list" : (in_array($_REQUEST["mode"], array('list','cloud'))? $_REQUEST['mode'] : 'cloud') ;
+
+error_reporting(E_ALL);
+ini_set('display_errors', true);

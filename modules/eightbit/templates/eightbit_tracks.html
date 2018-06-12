@@ -5,11 +5,20 @@
 	<{includeq file="db:eightbit_breadcrumb.html"}>
 	<h1>tracks in the 8Bit Genre Collective</h1>
 	<p>This is the 8Bit Gaming Music tracks, it has a wide amount of imact as you as a musician will be able to find creative commons jingles and tunes here that are catchy and fast paced as well as down with the tempo, from here you will be able to select individual tracks after playing them to your email address, which send every 20 minutes!</p>
-	<{if count($alphatracks) > 0}>
+	<{if count($tracksalpha) > 0}>
 	<p>This is the browser to break into track's in the 8Bit Collective!</p>
-	<{includeq file="db:eightbit_alpha_tracks_grid.html"}>
+	<{includeq file="db:eightbit_alpha_tracks_grid.html" alphatracks=$tracksalpha}>
 	<{/if}>
+	<div class="clear" id="clear" style="clear:both; width:auto;">&nbsp;</div>
+	<h2>Albums</h2>
+	<p>This is the breakdown list of Albums in the 8Bit Collective!</p>
+	<{includeq file="db:eightbit_albums_grid.html" pagenav=$albumspagenav}>
+	<div class="clear" id="clear" style="clear:both; width:auto;">&nbsp;</div>
+	<h2>Artists</h2>
+	<p>This is the breakdown list of Artists in the 8Bit Collective!</p>
+	<{includeq file="db:eightbit_artists_grid.html" pagenav=$artistspagenav}>
+	<div class="clear" id="clear" style="clear:both; width:auto;">&nbsp;</div>
 	<h2>Tracks</h2>
 	<p>This is the breakdown list of tracks in the 8Bit Collective!</p>
-	<{includeq file="db:eightbit_artists_grid.html"}>
+	<{includeq file="db:eightbit_tracks_grid.html" pagenav=$trackspagenav}>
 </div>
