@@ -118,6 +118,7 @@ INSERT INTO `8bit_repositories` VALUES (1,'svn','svn://svn.code.sf.net/p/chronol
 
 CREATE TABLE `8bit_tracks` (
   `id` mediumint(128) NOT NULL AUTO_INCREMENT,
+  `mode` enum('online', 'offline') NOT NULL DEFAULT 'online',
   `sha1` varchar(44) NOT NULL DEFAULT '',
   `alphaid` mediumint(22) NOT NULL DEFAULT '0',
   `repoid` mediumint(22) NOT NULL DEFAULT '0',

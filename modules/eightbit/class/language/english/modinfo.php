@@ -16,20 +16,7 @@
  * @author              Simon Antony Roberts <wishcraft@users.sourceforge.net>
  */
 
-class EightbitCronsPreload extends XoopsPreloadItem
-{
-    
-    /**
-     * @param $args
-     */
-    public static function eventCoreFooterEnd($args)
-    {
-        include_once dirname(__DIR__) . DS . 'crons' . DS . 'crawl.repositories.php';
-    }
-    
-    public static function eventCoreIncludeCommonEnd($args)
-    {
-        include_once dirname(__DIR__) . DS . 'crons' . DS . 'crawl.sha1bytes.php';
-        include_once dirname(__DIR__) . DS . 'crons' . DS . 'crawl.sha1matches.php';
-    }
-}
+
+define('_8BIT_MI_NAME', '8Bit Collective');
+define('_8BIT_MI_VERSION', '1.01');
+define('_8BIT_MI_DESCRIPTION', 'This displays and access and packages to email the 8Bit Collective resources/repositories!');

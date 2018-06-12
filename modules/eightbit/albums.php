@@ -24,17 +24,19 @@ include_once dirname(dirname(__DIR__)) . DS . 'header.php';
 include_once dirname(dirname(__DIR__)) . DS . 'class' . DS . 'pagenav.php';
 
 
-$breadcrumb = array();
+$title = $breadcrumb = array();
 $breadcrumb['home']['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/index.php";
 $breadcrumb['home']['chars'] = 'home';
 foreach(xoops_getModuleHandler('albums', basename(__DIR__))->getCrumbs($_REQUEST['albumalpha']) as $chars => $values)
 {
+    $title[$chars] = $chars;
     $breadcrumb[$chars]['chars'] = $chars;
     $breadcrumb[$chars]['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/albums.php?albumalpha=" . $chars;
 }
 $crumbkeys = array_keys($breadcrumb);
 $GLOBALS['xoopsTpl']->assign('breadcrumb', $breadcrumb);
 $GLOBALS['xoopsTpl']->assign('lastcrumb', $crumbkeys[count($crumbkeys) - 1]);
+$xoopsOption['xoops_pagetitle'] = "Albums: " .implode (" -> ", $title);
 
 $totalseconds = 0;
 $alpha = array();
@@ -108,7 +110,8 @@ $criteria = new Criteria('albumid', '(' . implode(', ', $albumids) . ')', 'IN');
 foreach(xoops_getModuleHandler('albums_tracks', basename(__DIR__))->getObjects($criteria, true) as $key => $object)
     $tracksids[$object->getVar('trackid')] = $object->getVar('trackid');
 
-$criteria = new Criteria('id', '(' . implode(', ', array_keys($tracksids)) . ')', 'IN');
+$criteria = new CriteriaCompo(new Criteria('id', '(' . implode(', ', array_keys($tracksids)) . ')', 'IN'));
+$criteria->add(new Criteria('mode', 'online'), "AND");
 $criteria->setSort((isset($_REQUEST['tracksort'])?$_REQUEST['tracksort']:$GLOBALS['sort']));
 $criteria->setOrder((isset($_REQUEST['trackorder'])?$_REQUEST['trackorder']:$GLOBALS['order']));
 $ttl = xoops_getModuleHandler('tracks', basename(__DIR__))->getCount($criteria);

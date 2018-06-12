@@ -32,6 +32,7 @@ class EightbitTracks extends XoopsObject
     {
         parent::__construct();
         $this->initVar('id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('mode', XOBJ_DTYPE_ENUM, 'online', false, false, false, false, false, array('online', 'offline'));
         $this->initVar('sha1', XOBJ_DTYPE_TXTBOX, null, false, 44);
         $this->initVar('alphaid', XOBJ_DTYPE_INT, null, false);
         $this->initVar('repoid', XOBJ_DTYPE_INT, null, false);
@@ -69,11 +70,14 @@ class EightbitTracksHandler extends XoopsPersistableObjectHandler
     
     function insert(EightbitTracks $object, $force = true)
     {
+        
         $isnew = false;
         if ($object->isNew())
         {
             $isnew = true;
             $object->setVar('created', time());
+        } else {
+            $oldobj = $this->get($object->getVar('id'));
         }
         $trackid = parent::insert($object, $force);
         if ($isnew != false)
@@ -306,6 +310,120 @@ class EightbitTracksHandler extends XoopsPersistableObjectHandler
                     }
                 }
             }
+        } else {
+            if ($object->getVar('bytes') != $oldobj->getVar('bytes'))
+            {
+                $title = strtolower(str_replace(" ", "", $object->getVar('title')));
+                $alphachars = $bravochars = $charleychars = '-';
+                $alpha_handler = xoops_getModuleHandler('alpha', basename(dirname(__DIR__)));
+                $alphachars = substr($title, 0, 1);
+                if (strlen($alphachars)!=1)
+                    $alphachars = '-';
+                    $bravochars = substr($title, 0, 2);
+                if (strlen($bravochars)!=2)
+                    $bravochars = '--';
+                    $charleychars = substr($title, 0, 3);
+                if (strlen($charleychars)!=3)
+                    $charleychars = '---';
+                $criteria = new CriteriaCompo(new Criteria('alpha', $alphachars, 'LIKE'));
+                $criteria->add(new Criteria('bravo', $bravochars, 'LIKE'));
+                $criteria->add(new Criteria('charley', $charleychars, 'LIKE'));
+                $criteria->add(new Criteria('type', 'track', 'LIKE'));
+                if ($alpha_handler->getCount($criteria)!=0)
+                {
+                    $alphaobjs = $alpha_handler->getObjects($criteria);
+                    $trackalphaid = $alphaobjs[0]->getVar('id');
+                }           
+                $albums_handler = xoops_getModuleHandler('albums', basename(dirname(__DIR__)));
+                if ($album = $albums_handler->get($object->getVar('albumid'))) {
+                    $title = strtolower(str_replace(" ", "", $album->getVar('album')));
+                    $alphachars = $bravochars = $charleychars = '-';
+                    $alpha_handler = xoops_getModuleHandler('alpha', basename(dirname(__DIR__)));
+                    $alphachars = substr($title, 0, 1);
+                    if (strlen($alphachars)!=1)
+                        $alphachars = '-';
+                    $bravochars = substr($title, 0, 2);
+                    if (strlen($bravochars)!=2)
+                        $bravochars = '--';
+                    $charleychars = substr($title, 0, 3);
+                    if (strlen($charleychars)!=3)
+                        $charleychars = '---';
+                    $criteria = new CriteriaCompo(new Criteria('alpha', $alphachars, 'LIKE'));
+                    $criteria->add(new Criteria('bravo', $bravochars, 'LIKE'));
+                    $criteria->add(new Criteria('charley', $charleychars, 'LIKE'));
+                    $criteria->add(new Criteria('type', 'album', 'LIKE'));
+                    if ($alpha_handler->getCount($criteria)!=0)
+                    {
+                        $alphaobjs = $alpha_handler->getObjects($criteria);
+                        $albumalphaid = $alphaobjs[0]->getVar('id');
+                    }   
+                    $artists_handler = xoops_getModuleHandler('artists', basename(dirname(__DIR__)));
+                    if ($artist = $artists_handler->get($object->getVar('albumid'))) {
+                        $artistalphaid = $artids = array();
+                        if ($artist->getVar('type') == 'alone')
+                        {
+                            $artids[$artist->getVar('id')] = $artist->getVar('artist');
+                        } elseif ($artist->getVar('type') == 'chaining') {
+                            $artists_chaining_handler = xoops_getModuleHandler('artists_chaining', basename(dirname(__DIR__)));
+                            foreach($artists_chaining_handler->getObjects(new Criteria('artistid', $artist->getVar('id'))) as $chaining)
+                            {
+                                if ($artist = $artists_handler->get($chaining->getVar('childid')))
+                                    $artids[$artist->getVar('id')] = $artist->getVar('artist');
+                            }
+                            
+                        }
+                        foreach($artids as $artid => $title) {
+                            $title = strtolower(str_replace(" ", "", $title));
+                            $alphachars = $bravochars = $charleychars = '-';
+                            $alpha_handler = xoops_getModuleHandler('alpha', basename(dirname(__DIR__)));
+                            $alphachars = substr($title, 0, 1);
+                            if (strlen($alphachars)!=1)
+                                $alphachars = '-';
+                            $bravochars = substr($title, 0, 2);
+                            if (strlen($bravochars)!=2)
+                                $bravochars = '--';
+                            $charleychars = substr($title, 0, 3);
+                            if (strlen($charleychars)!=3)
+                                $charleychars = '---';
+                            $criteria = new CriteriaCompo(new Criteria('alpha', $alphachars, 'LIKE'));
+                            $criteria->add(new Criteria('bravo', $bravochars, 'LIKE'));
+                            $criteria->add(new Criteria('charley', $charleychars, 'LIKE'));
+                            $criteria->add(new Criteria('type', 'artist', 'LIKE'));
+                            if ($alpha_handler->getCount($criteria)!=0)
+                            {
+                                $alphaobjs = $alpha_handler->getObjects($criteria);
+                                $artistalphaid[] = $alphaobjs[0]->getVar('id');
+                            } 
+                        }
+                    }
+                }
+                $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_artists') . "` SET `bytes` = `bytes` + '" . $object->getVar('bytes') . "' WHERE `id` = '" . $object->getVar('artistid') . "'";
+                $GLOBALS['xoopsDB']->queryF($sql);
+                $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_albums') . "` SET `bytes` = `bytes` + '" . $object->getVar('bytes') . "' WHERE `id` = '" . $object->getVar('albumid') . "'";
+                $GLOBALS['xoopsDB']->queryF($sql);
+                $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` SET `bytes` = `bytes` + '" . $object->getVar('bytes') . "' WHERE `id` = '" . $trackalphaid . "'";
+                $GLOBALS['xoopsDB']->queryF($sql);
+                $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` SET `bytes` = `bytes` + '" . $object->getVar('bytes') . "' WHERE `id` = '" . $albumalphaid . "'";
+                $GLOBALS['xoopsDB']->queryF($sql);
+                foreach($artistalphaid as $alphaid)
+                {
+                    $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` SET `bytes` = `bytes` + '" . $object->getVar('bytes') . "' WHERE `id` = '" . $alphaid . "'";
+                    $GLOBALS['xoopsDB']->queryF($sql);                   
+                }
+                $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_artists') . "` SET `bytes` = `bytes` - '" . $oldobj->getVar('bytes') . "' WHERE `id` = '" . $object->getVar('artistid') . "'";
+                $GLOBALS['xoopsDB']->queryF($sql);
+                $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_albums') . "` SET `bytes` = `bytes` - '" . $oldobj->getVar('bytes') . "' WHERE `id` = '" . $object->getVar('albumid') . "'";
+                $GLOBALS['xoopsDB']->queryF($sql);
+                $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` SET `bytes` = `bytes` - '" . $oldobj->getVar('bytes') . "' WHERE `id` = '" . $trackalphaid . "'";
+                $GLOBALS['xoopsDB']->queryF($sql);
+                $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` SET `bytes` = `bytes` - '" . $oldobj->getVar('bytes') . "' WHERE `id` = '" . $albumalphaid . "'";
+                $GLOBALS['xoopsDB']->queryF($sql);
+                foreach($artistalphaid as $alphaid)
+                {
+                    $sql = "UPDATE `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` SET `bytes` = `bytes` - '" . $oldobj->getVar('bytes') . "' WHERE `id` = '" . $alphaid . "'";
+                    $GLOBALS['xoopsDB']->queryF($sql);
+                }
+            }
         }
         return $trackid;
     }
@@ -330,7 +448,7 @@ class EightbitTracksHandler extends XoopsPersistableObjectHandler
     
     public function getByKey($key = '')
     {
-        $sql = "SELECT * FROM `" . $GLOBALS['xoopsDB']->prefix('8bit_tracks') . "` WHERE md5(`id`) LIKE '$key'";
+        $sql = "SELECT * FROM `" . $GLOBALS['xoopsDB']->prefix('8bit_tracks') . "` WHERE md5(`id`) LIKE '$key' AND `mode` = 'online'";
         if ($myrow = $GLOBALS['xoopsDB']->fetchArray($GLOBALS['xoopsDB']->queryF($sql)))
         {
             $obj = new EightbitTracks();

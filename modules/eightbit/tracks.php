@@ -23,17 +23,19 @@ $xoopsOption['template_main'] = 'db:eightbit_tracks.html';
 include_once dirname(dirname(__DIR__)) . DS . 'header.php';
 include_once dirname(dirname(__DIR__)) . DS . 'class' . DS . 'pagenav.php';
 
-$breadcrumb = array();
+$title = $breadcrumb = array();
 $breadcrumb['home']['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/index.php";
 $breadcrumb['home']['chars'] = 'home';
 foreach(xoops_getModuleHandler('tracks', basename(__DIR__))->getCrumbs($_REQUEST['trackalpha']) as $chars => $values)
 {
+    $title[$chars] = $chars;
     $breadcrumb[$chars]['chars'] = $chars;
     $breadcrumb[$chars]['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/tracks.php?trackalpha=" . $chars;
 }
 $crumbkeys = array_keys($breadcrumb);
 $GLOBALS['xoopsTpl']->assign('breadcrumb', $breadcrumb);
 $GLOBALS['xoopsTpl']->assign('lastcrumb', $crumbkeys[count($crumbkeys) - 1]);
+$xoopsOption['xoops_pagetitle'] = "Tracks: " .implode (" -> ", $title);
 
 $totalseconds = 0;
 $alpha = array();
@@ -116,7 +118,8 @@ $GLOBALS['xoopsTpl']->assign('artiststart', (isset($_REQUEST['artiststart'])?$_R
 $GLOBALS['xoopsTpl']->assign('artistlimit', (isset($_REQUEST['artistlimit'])?$_REQUEST['artistlimit']:$GLOBALS['limit']));
 $GLOBALS['xoopsTpl']->assign('artistsdigression', http_build_query(eightbit_RemoveFieldKeywords('artist', parse_str($_SERVER['QUERY_STRING']))));
      
-$criteria = new Criteria('id', '(' . implode(', ', array_keys($tracksids)) . ')', 'IN');
+$criteria = new CriteriaCompo(new Criteria('id', '(' . implode(', ', array_keys($tracksids)) . ')', 'IN'));
+$criteria->add(new Criteria('mode', 'online'), "AND");
 $criteria->setSort((isset($_REQUEST['tracksort'])?$_REQUEST['tracksort']:$GLOBALS['sort']));
 $criteria->setOrder((isset($_REQUEST['trackorder'])?$_REQUEST['trackorder']:$GLOBALS['order']));
 $ttl = xoops_getModuleHandler('tracks', basename(__DIR__))->getCount($criteria);
@@ -142,7 +145,5 @@ $GLOBALS['xoopsTpl']->assign('trackorder', (isset($_REQUEST['trackorder'])?$_REQ
 $GLOBALS['xoopsTpl']->assign('trackstart', (isset($_REQUEST['trackstart'])?$_REQUEST['trackstart']:$GLOBALS['start']));
 $GLOBALS['xoopsTpl']->assign('tracklimit', (isset($_REQUEST['tracklimit'])?$_REQUEST['tracklimit']:$GLOBALS['limit']));
 $GLOBALS['xoopsTpl']->assign('tracksdigression', http_build_query(eightbit_RemoveFieldKeywords('track', parse_str($_SERVER['QUERY_STRING']))));
-
-
     
 include_once dirname(dirname(__DIR__)) . DS . 'footer.php';

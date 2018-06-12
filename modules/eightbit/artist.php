@@ -38,6 +38,7 @@ foreach(xoops_getModuleHandler('artists', basename(__DIR__))->getCrumbs(xoops_ge
 }
 $breadcrumb[$_REQUEST['key']]['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/artist.php?key=".$_REQUEST['key'];
 $breadcrumb[$_REQUEST['key']]['chars'] = $artist->getVar('artist');
+$xoopsOption['xoops_pagetitle'] = "Artist: " . $artist->getVar('artist');
 
 $crumbkeys = array_keys($breadcrumb);
 $GLOBALS['xoopsTpl']->assign('breadcrumb', $breadcrumb);

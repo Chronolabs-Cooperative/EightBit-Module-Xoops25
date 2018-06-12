@@ -39,6 +39,7 @@ foreach(xoops_getModuleHandler('tracks', basename(__DIR__))->getCrumbs(xoops_get
 }
 $breadcrumb[$_REQUEST['key']]['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/track.php?key=".$_REQUEST['key'];
 $breadcrumb[$_REQUEST['key']]['chars'] = $track->getVar('title');
+$xoopsOption['xoops_pagetitle'] = "Track: " .$track->getVar('title');
 
 $crumbkeys = array_keys($breadcrumb);
 $GLOBALS['xoopsTpl']->assign('breadcrumb', $breadcrumb);
@@ -53,6 +54,6 @@ $GLOBALS['xoopsTpl']->assign('track', array(   'title'         =>      $track->g
     'bytes'         =>      number_format($track->getVar('bytes'), 0),
     'hits'          =>      $track->getVar('hits'),
     'player'        =>      eightbit_PlayerHTML('player.swf', sprintf(xoops_getModuleHandler('repositories', basename(__DIR__))->get($track->getVar('repoid'))->getVar('raw'), substr($track->getVar('path'), 1) . "/" . urlencode($track->getVar('file')))),
-    'playseconds'   =>      eightbit_secondsDiplay($track->getVar('playseconds'))));
+    'playtime'      =>      eightbit_secondsDiplay($track->getVar('playseconds'))));
 
 include_once dirname(dirname(__DIR__)) . DS . 'footer.php';

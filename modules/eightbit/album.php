@@ -40,6 +40,7 @@ foreach(xoops_getModuleHandler('albums', basename(__DIR__))->getCrumbs(xoops_get
 }
 $breadcrumb[$_REQUEST['key']]['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/album.php?key=".$_REQUEST['key'];
 $breadcrumb[$_REQUEST['key']]['chars'] = $album->getVar('album');
+$xoopsOption['xoops_pagetitle'] = "Album: " . $album->getVar('album');
 
 $crumbkeys = array_keys($breadcrumb);
 $GLOBALS['xoopsTpl']->assign('breadcrumb', $breadcrumb);
