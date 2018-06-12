@@ -79,7 +79,7 @@ foreach(xoops_getModuleHandler('albums', basename(__DIR__))->getObjects($criteri
         'hits'      =>      $object->getVar('hits'),
         'playtime'  =>      eightbit_secondsDiplay($object->getVar('totalseconds'))));
 }
-$pagenav = new XoopsPageNav($ttl, (isset($_REQUEST['albumlimit'])?$_REQUEST['albumlimit']:$GLOBALS['limit']), (isset($_REQUEST['albumstart'])?$_REQUEST['albumstart']:$GLOBALS['start']), 'albumstart', 'artistalpha='.$_REQUEST['artistalpha'].'&albumlimit='.(isset($_REQUEST['albumlimit'])?$_REQUEST['albumlimit']:$GLOBALS['limit']).'&'.http_build_query(eightbit_RemoveFieldKeywords('album', parse_str($_SERVER['QUERY_STRING']))));
+$pagenav = new XoopsPageNav($ttl, (isset($_REQUEST['albumlimit'])?$_REQUEST['albumlimit']:$GLOBALS['limit']), (isset($_REQUEST['albumstart'])?$_REQUEST['albumstart']:$GLOBALS['start']), 'albumstart', 'key='.$_REQUEST['key'].'&albumlimit='.(isset($_REQUEST['albumlimit'])?$_REQUEST['albumlimit']:$GLOBALS['limit']).'&'.http_build_query(eightbit_RemoveFieldKeywords('album', parse_str($_SERVER['QUERY_STRING']))));
 $GLOBALS['xoopsTpl']->assign('albumspagenav', $pagenav->renderNav(7));
 $GLOBALS['xoopsTpl']->assign('albumsort', (isset($_REQUEST['albumsort'])?$_REQUEST['albumsort']:$GLOBALS['sort']));
 $GLOBALS['xoopsTpl']->assign('albumorder', (isset($_REQUEST['albumorder'])?$_REQUEST['albumorder']:$GLOBALS['order']));
@@ -111,7 +111,7 @@ foreach(xoops_getModuleHandler('tracks', basename(__DIR__))->getObjects($criteri
         'player'        =>      eightbit_PlayerHTML('player.swf', sprintf(xoops_getModuleHandler('repositories', basename(__DIR__))->get($object->getVar('repoid'))->getVar('raw'), substr($object->getVar('path'), 1) . "/" . urlencode($object->getVar('file')))),
         'playseconds'   =>      eightbit_secondsDiplay($object->getVar('playseconds'))));
 }
-$pagenav = new XoopsPageNav($ttl, (isset($_REQUEST['tracklimit'])?$_REQUEST['tracklimit']:$GLOBALS['limit']), (isset($_REQUEST['trackstart'])?$_REQUEST['trackstart']:$GLOBALS['start']), 'trackstart', 'artistalpha='.$_REQUEST['artistalpha'].'&tracklimit='.(isset($_REQUEST['tracklimit'])?$_REQUEST['tracklimit']:$GLOBALS['limit']).'&'.http_build_query(eightbit_RemoveFieldKeywords('track', parse_str($_SERVER['QUERY_STRING']))));
+$pagenav = new XoopsPageNav($ttl, (isset($_REQUEST['tracklimit'])?$_REQUEST['tracklimit']:$GLOBALS['limit']), (isset($_REQUEST['trackstart'])?$_REQUEST['trackstart']:$GLOBALS['start']), 'trackstart', 'key='.$_REQUEST['key'].'&tracklimit='.(isset($_REQUEST['tracklimit'])?$_REQUEST['tracklimit']:$GLOBALS['limit']).'&'.http_build_query(eightbit_RemoveFieldKeywords('track', parse_str($_SERVER['QUERY_STRING']))));
 $GLOBALS['xoopsTpl']->assign('trackspagenav', $pagenav->renderNav(7));
 $GLOBALS['xoopsTpl']->assign('tracksort', (isset($_REQUEST['tracksort'])?$_REQUEST['tracksort']:$GLOBALS['sort']));
 $GLOBALS['xoopsTpl']->assign('trackorder', (isset($_REQUEST['trackorder'])?$_REQUEST['trackorder']:$GLOBALS['order']));
