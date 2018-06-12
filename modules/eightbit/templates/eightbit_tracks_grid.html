@@ -1,0 +1,31 @@
+<{if count($tracks) > 0}>
+	<div style="float: right; width: auto; height: auto: padding: 15px;" id="pagenav" class="pagenav">
+		<{$pagenav}>
+	</div>
+	<table id="tracks" class="tracks">
+		<tr class="head">
+			<td style="text-align: center;"><a href="<{$server.php_self}>?tracksort=title&trackorder=<{$trackorder}>&<{$disgression}>">Track Name</a><{if $tracksort=='title'}>&nbsp;<{if $trackorder=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?tracksort=album&trackorder=<{$trackorder}>&<{$disgression}>">Album Title</a><{if $tracksort=='album'}>&nbsp;<{if $trackorder=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?tracksort=artist&trackorder=<{$trackorder}>&<{$disgression}>">Artist Name</a><{if $tracksort=='artist'}>&nbsp;<{if $trackorder=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?tracksort=year&trackorder=<{$trackorder}>&<{$disgression}>">Year</a><{if $tracksort=='year'}>&nbsp;<{if $trackorder=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?tracksort=bitrate&trackorder=<{$trackorder}>&<{$disgression}>">Bit Rate</a><{if $tracksort=='bitrate'}>&nbsp;<{if $trackorder=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?tracksort=playseconds&trackorder=<{$trackorder}>&<{$disgression}>">Play Time</a><{if $tracksort=='playseconds'}>&nbsp;<{if $trackorder=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}><td>
+			<td style="text-align: center;">Play Audio<td>
+		</td>
+		<{foreach item=track from=$tracks}>
+		<tr class="<{cycle values='even,odd'}>">
+			<td style="text-align: left;"><a href="<{$track.track_url}>"><{if strlen($track.title)==0}><em>Track Title Undefined</em><{else}><{$track.title}><{/if}></a></td>
+			<td style="text-align: left;"><a href="<{$track.album_url}>"><{if strlen($track.album)==0}><em>Album Title Undefined</em><{else}><{$track.album}><{/if}></a></td>
+			<td style="text-align: left;"><a href="<{$track.artist_url}>"><{if strlen($track.artist)==0}><em>Artist Name Undefined</em><{else}><{$track.artist}><{/if}></a></td>
+			<td style="text-align: center;"><{$track.year}></td>
+			<td style="text-align: center;"><{$track.bitrate}></td>
+			<td style="text-align: center;"><{$track.playtime}></td>
+			<td style="text-align: center;"><{$track.playseconds}></td>
+			<td style="text-align: center;"><{$track.player}></td>
+		</tr>
+		<{/foreach}>
+	</table>
+	<div style="float: left; width: auto; height: auto: padding: 15px;" id="pagenav" class="pagenav">
+		<{$pagenav}>
+	</div>
+<{/if}>

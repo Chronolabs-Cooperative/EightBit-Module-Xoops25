@@ -3,7 +3,7 @@
 		<{foreach item=alpha from=$alphaalbums key=alphakey}>
 		<div style="width: auto; height: auto; margin: 7px; padding: 4px; float: left;">
 			<div id="alpha_char" class="alpha_char_<{$alphakey}>">
-				<a href="<{$alpha.url}>"><{$alpha.chars}></a>&nbsp;<span id="alpha_tracks">(<{$alpha.tracks}>)</span>
+				<a href="<{$alpha.url}>"><font style="font-size: 450%;"><{$alpha.chars}></font></a>&nbsp;<span id="alpha_tracks">(<{$alpha.tracks}>)</span>
 			</div>
 			<div id="alpha_playtime" class="alpha_playtime_<{$alphakey}>">
 				<{$alpha.playtime}>

@@ -26,7 +26,7 @@ global $eightbitModule, $eightbitConfigsList, $eightbitConfigs, $eightbitConfigs
 
 if (empty($eightbitModule))
 {
-    if (is_a($eightbitModule = xoops_getHandler('module')->getByDirname(basename(__DIR__)), "XoopsModule"))
+    if (is_a($eightbitModule = xoops_GetHandler('module')->getByDirname(basename(__DIR__)), "XoopsModule"))
     {
         if (empty($eightbitConfigsList))
         {
@@ -34,7 +34,7 @@ if (empty($eightbitModule))
         }
         if (empty($eightbitConfigs))
         {
-            $eightbitConfigs = xoops_getHandler('config')->getConfigs(new Criteria('conf_modid', $eightbitModule->getVar('mid')));
+            $eightbitConfigs = xoops_GetHandler('config')->getConfigs(new Criteria('conf_modid', $eightbitModule->getVar('mid')));
         }
         if (empty($eightbitConfigsOptions) && !empty($eightbitConfigs))
         {
@@ -44,17 +44,17 @@ if (empty($eightbitModule))
     }
 }
 
-global $artistalpha, $albumalpha, $trackalpha, $artistid, $albumid, $trackid, $start, $sort, $order, $mode, $op;
+global $artistalpha, $albumalpha, $trackalpha, $artistid, $albumid, $trackid, $start, $limit, $sort, $order, $mode, $op;
 
-$op   	         = empty($_GET["op"]) ? 'default' : $_GET["op"];
-$artistalpha	 = intval( empty($_GET["artistalpha"]) ? md5(null) : $_GET["artistalpha"] );
-$albumalpha  	 = intval( empty($_GET["albumalpha"]) ? md5(null) : $_GET["albumalpha"] );
-$trackalpha  	 = intval( empty($_GET["trackalpha"]) ? md5(null) : $_GET["trackalpha"] );
-$artistid	 	 = intval( empty($_GET["artistid"]) ? md5(null) : $_GET["artistid"] );
-$albumid  	     = intval( empty($_GET["albumid"]) ? md5(null) : $_GET["albumid"] );
-$trackid  	     = intval( empty($_GET["trackid"]) ? md5(null) : $_GET["trackid"] );
-$start  	     = intval( empty($_GET["start"]) ? 0 : $_GET["start"] );
-$limit  	     = intval( empty($_GET["limit"]) ? $eightbitConfigsList['limit'] : $_GET["limit"] );
-$sort   	     = empty($_GET["sort"]) ? "hits" : $_GET["sort"] ;
-$order  	     = empty($_GET["order"]) ? "DESC" : $_GET["order"] ;
-$mode   	     = empty($_GET["mode"]) ? "list" : (in_array($_GET["mode"], array('list','cloud'))? $_GET['mode'] : 'cloud') ;
+$op   	         = empty($_REQUEST["op"]) ? 'default' : $_REQUEST["op"];
+$artistalpha	 = intval( empty($_REQUEST["artistalpha"]) ? '' : $_REQUEST["artistalpha"] );
+$albumalpha  	 = intval( empty($_REQUEST["albumalpha"]) ? '' : $_REQUEST["albumalpha"] );
+$trackalpha  	 = intval( empty($_REQUEST["trackalpha"]) ? '' : $_REQUEST["trackalpha"] );
+$artistid	 	 = intval( empty($_REQUEST["artistid"]) ? md5(null) : $_REQUEST["artistid"] );
+$albumid  	     = intval( empty($_REQUEST["albumid"]) ? md5(null) : $_REQUEST["albumid"] );
+$trackid  	     = intval( empty($_REQUEST["trackid"]) ? md5(null) : $_REQUEST["trackid"] );
+$start  	     = intval( empty($_REQUEST["start"]) ? 0 : $_REQUEST["start"] );
+$limit  	     = intval( empty($_REQUEST["limit"]) ? 13 : $_REQUEST["limit"] );
+$sort   	     = empty($_REQUEST["sort"]) ? "hits" : $_REQUEST["sort"] ;
+$order  	     = empty($_REQUEST["order"]) ? "DESC" : $_REQUEST["order"] ;
+$mode   	     = empty($_REQUEST["mode"]) ? "list" : (in_array($_REQUEST["mode"], array('list','cloud'))? $_REQUEST['mode'] : 'cloud') ;

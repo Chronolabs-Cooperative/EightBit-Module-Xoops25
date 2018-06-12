@@ -1,0 +1,28 @@
+<{if count($albums) > 0}>
+	<div style="float: right; width: auto; height: auto: padding: 15px;" id="pagenav" class="pagenav">
+		<{$pagenav}>
+	</div>
+	<table id="albums" class="albums">
+		<tr class="head">
+			<td style="text-align: center;"><a href="<{$server.php_self}>?albumsort=album&albumorder=<{$albumorder}>&<{$albumdisgression}>">Album<{if $albumsort=='album'}>&nbsp;<{if $albumorder=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?albumsort=artists&albumorder=<{$albumorder}>&<{$albumdisgression}>">Artists<{if $albumsort=='artists'}>&nbsp;<{if $albumorder=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?albumsort=tracks&albumorder=<{$albumorder}>&<{$albumdisgression}>">Tracks<{if $albumsort=='tracks'}>&nbsp;<{if $albumorder=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?albumsort=hits&albumorder=<{$albumorder}>&<{$albumdisgression}>">Hits<{if $albumsort=='hits'}>&nbsp;<{if $albumorder=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?albumsort=bytes&albumorder=<{$albumorder}>&<{$albumdisgression}>">Bytes<{if $albumsort=='bytes'}>&nbsp;<{if $albumorder=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}></td>
+			<td style="text-align: center;"><a href="<{$server.php_self}>?albumsort=totalseconds&albumorder=<{$albumorder}>&<{$albumdisgression}>">Play Time<{if $albumsort=='totalseconds'}>&nbsp;<{if $albumorder=='DESC'}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/desc.png"/><{else}><img src="<{$xoops_url}>/modules/eightbit/assets/icons/asc.png"/><{/if}><{/if}><td>
+		</td>
+		<{foreach item=album from=$albums}>
+		<tr class="<{cycle values='even,odd'}>">
+			<td style="text-align: left;"><a href="<{$album.url}>"><{if strlen($album.album)==0}><em>Album Name Undefined</em><{else}><{$album.album}><{/if}></a></td>
+			<td style="text-align: center;"><{$album.artists}></td>
+			<td style="text-align: center;"><{$album.tracks}></td>
+			<td style="text-align: center;"><{$album.hits}></td>
+			<td style="text-align: center;"><{$album.bytes}></td>
+			<td style="text-align: center;"><{$album.playtime}></td>
+		</tr>
+		<{/foreach}>
+	</table>
+	<div style="float: left; width: auto; height: auto: padding: 15px;" id="pagenav" class="pagenav">
+		<{$pagenav}>
+	</div>
+<{/if}>

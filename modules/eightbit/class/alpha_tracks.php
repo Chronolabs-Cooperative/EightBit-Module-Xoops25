@@ -49,4 +49,15 @@ class EightbitAlpha_tracksHandler extends XoopsPersistableObjectHandler
     {
         parent::__construct($db, '8bit_alpha_tracks', 'EightbitAlpha_tracks', 'id', 'trackid');
     }
+    
+    
+    public function selAlpha($alpha = '')
+    {
+        return xoops_getModuleHandler('alpha', 'eightbit')->selAlpha($alpha, 'track');
+    }
+    
+    public function getIDsAlpha($alpha = '')
+    {
+        return xoops_getModuleHandler('alpha', 'eightbit')->getIDsAlpha($alpha, 'track');
+    }
 }

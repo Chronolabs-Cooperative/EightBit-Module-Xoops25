@@ -35,6 +35,8 @@ class EightbitAlpha_artists extends XoopsObject
         $this->initVar('alphaid', XOBJ_DTYPE_INT, null, false);
         $this->initVar('artistid', XOBJ_DTYPE_INT, null, false);
     }
+    
+    
 }
 
 /**
@@ -48,5 +50,17 @@ class EightbitAlpha_artistsHandler extends XoopsPersistableObjectHandler
     public function __construct(XoopsDatabase $db)
     {
         parent::__construct($db, '8bit_alpha_artists', 'EightbitAlpha_artists', 'id', 'artistid');
+    }
+    
+    
+    public function selAlpha($alpha = '')
+    {
+        return xoops_getModuleHandler('alpha', 'eightbit')->selAlpha($alpha, 'artist');
+    }
+    
+    
+    public function getIDsAlpha($alpha = '')
+    {
+        return xoops_getModuleHandler('alpha', 'eightbit')->getIDsAlpha($alpha, 'artist');
     }
 }

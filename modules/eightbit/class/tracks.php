@@ -309,4 +309,18 @@ class EightbitTracksHandler extends XoopsPersistableObjectHandler
         }
         return $trackid;
     }
+    
+    
+    public function selAlpha($alpha = '')
+    {
+        
+        return xoops_getModuleHandler('alpha_tracks', 'eightbit')->selAlpha($alpha);
+    }
+    
+    public function getIDsAlpha($alpha = '')
+    {
+        
+        return xoops_getModuleHandler('alpha_tracks', 'eightbit')->getIDsAlpha($alpha);
+    }
+    
 }

@@ -16,6 +16,39 @@
  * @author              Simon Antony Roberts <wishcraft@users.sourceforge.net>
  */
 
+if (!function_exists("eightbit_PlayerHTML")) {
+    
+    /* function eightbit_getURIData()
+     *
+     * 	Get a supporting domain system for the API
+     * @author 		Simon Roberts (Chronolabs) simon@labs.coop
+     *
+     * @return 		float()
+     */
+    function eightbit_PlayerHTML($player = '', $url = '', $width = 240, $height = 24)
+    {
+        return "<embed flashvars=\"playerID=1&amp;bg=0xf8f8f8&amp;leftbg=0x3786b3&amp;lefticon=0x78bee3&amp;rightbg=0x3786b3&amp;rightbghover=0x78bee3&amp;righticon=0x78bee3&amp;righticonhover=0x3786b3&amp;text=0x666666&amp;slider=0x3786b3&amp;track=0xcccccc&amp;border=0x666666&amp;loader=0x78bee3&amp;loop=no&amp;soundFile=$url\" quality='high' menu='false' wmode='transparent' pluginspage='http://www.macromedia.com/go/getflashplayer' src='" . XOOPS_URL . "/modules/".basename(dirname(__DIR__))."/assets/swf/$player'  width=$width height=$height type='application/x-shockwave-flash'></embed>";
+    }
+}
+
+if (!function_exists("eightbit_RemoveFieldKeywords")) {
+    
+    /* function eightbit_getURIData()
+     *
+     * 	Get a supporting domain system for the API
+     * @author 		Simon Roberts (Chronolabs) simon@labs.coop
+     *
+     * @return 		float()
+     */
+    function eightbit_RemoveFieldKeywords($keyword = '', $array = array())
+    {
+        foreach($array as $key => $values)
+            if (strpos(strtolower(' '. $key), strtolower($keyword)))
+                unset($array[$key]);
+       return $array;
+    }
+}
+
 if (!function_exists("eightbit_getURIData")) {
     
     /* function eightbit_getURIData()

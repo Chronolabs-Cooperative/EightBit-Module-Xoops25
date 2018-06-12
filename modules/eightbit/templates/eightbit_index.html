@@ -5,13 +5,16 @@
 	<h1>8 Bit Genre Collective</h1>
 	<p>This is the 8 Bit Gaming Music Genre Collection, it has a wide amount of imact as you as a musician will be able to find creative commons jingles and tunes here that are catchy and fast paced as well as down with the tempo, from here you will be able to select individual tracks after playing them to your email address, which send every 20 minutes!</p>
 	<p>There is <em>total play time</em> in the library of: <strong><{$totalplaytime}></strong></p>
+	<div class="clear" id="clear" style="clear:both; width:auto;">&nbsp;</div>
 	<h2>Albums</h2>
 	<p>This is the browser to break into album's in the 8 Bit Collective!</p>
-	<{includeq file="db:eightbit_alpha_albums_grid.html"}>
+	<{includeq file="db:eightbit_alpha_albums_grid.html" alphaalbums=$albumsalpha}>
+	<div class="clear" id="clear" style="clear:both; width:auto;">&nbsp;</div>
 	<h2>Artists</h2>
 	<p>This is the browser to break into artist's in the 8 Bit Collective!</p>
-	<{includeq file="db:eightbit_alpha_artists_grid.html"}>
+	<{includeq file="db:eightbit_alpha_artists_grid.html" alphaartists=$artistsalpha}>
+	<div class="clear" id="clear" style="clear:both; width:auto;">&nbsp;</div>
 	<h2>Tracks</h2>
 	<p>This is the browser to break into track's in the 8 Bit Collective!</p>
-	<{includeq file="db:eightbit_alpha_tracks_grid.html"}>
+	<{includeq file="db:eightbit_alpha_tracks_grid.html" alphatracks=$tracksalpha}>
 </div>

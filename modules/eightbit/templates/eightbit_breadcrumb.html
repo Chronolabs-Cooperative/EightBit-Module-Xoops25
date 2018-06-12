@@ -6,7 +6,7 @@
 				<a href="<{$crumb.url}>"><{$crumb.chars}></a>
 			</div>
 		</div>
-		<{if $breadcrumb[$crumbkey] != $breadcrumb[count($breadcrumb) - 1]}>
+		<{if $breadcrumb[$crumbkey] != $lastcrumb}>
 		<div id="crumb_spacer" class="crumb_spacer">
 			&nbsp;>>&nbsp;
 		</div>

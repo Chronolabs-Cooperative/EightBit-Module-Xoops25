@@ -49,4 +49,14 @@ class EightbitAlpha_albumsHandler extends XoopsPersistableObjectHandler
     {
         parent::__construct($db, '8bit_alpha_albums', 'EightbitAlpha_albums', 'id', 'albumid');
     }
+    
+    public function selAlpha($alpha = '')
+    {
+        return xoops_getModuleHandler('alpha', 'eightbit')->selAlpha($alpha, 'album');   
+    }
+    
+    public function getIDsAlpha($alpha = '')
+    {
+        return xoops_getModuleHandler('alpha', 'eightbit')->getIDsAlpha($alpha, 'album');
+    }
 }

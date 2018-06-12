@@ -17,3 +17,40 @@
  */
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'header.php';
+
+$xoopsOption['template_main'] = 'db:eightbit_index.html';
+include_once dirname(dirname(__DIR__)) . DS . 'header.php';
+$totalseconds = 0;
+$alpha = array();
+foreach(xoops_getModuleHandler('albums', basename(__DIR__))->selAlpha('') as $chars => $values)
+{
+    $alpha[$chars]['chars'] = $chars;
+    $alpha[$chars]['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/albums.php?albumalpha=" . $chars;
+    $alpha[$chars]['tracks'] = eightbit_secondsDiplay($values['totalseconds']);
+
+}
+$GLOBALS['xoopsTpl']->assign('albumsalpha', $alpha);
+
+
+$alpha = array();
+foreach(xoops_getModuleHandler('artists', basename(__DIR__))->selAlpha('') as $chars => $values)
+{
+    $alpha[$chars]['chars'] = $chars;
+    $alpha[$chars]['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/artists.php?artistalpha=" . $chars;
+    $alpha[$chars]['tracks'] = eightbit_secondsDiplay($values['totalseconds']);
+    $totalseconds += $values['totalseconds'];
+}
+$GLOBALS['xoopsTpl']->assign('artistsalpha', $alpha);
+$GLOBALS['xoopsTpl']->assign('totalplaytime', eightbit_secondsDiplay($totalseconds));
+
+$alpha = array();
+foreach(xoops_getModuleHandler('tracks', basename(__DIR__))->selAlpha('') as $chars => $values)
+{
+    $alpha[$chars]['chars'] = $chars;
+    $alpha[$chars]['url'] = XOOPS_URL . '/modules/' . basename(__DIR__) . "/tracks.php?trackalpha=" . $chars;
+    $alpha[$chars]['tracks'] = eightbit_secondsDiplay($values['totalseconds']);
+}
+$GLOBALS['xoopsTpl']->assign('tracksalpha', $alpha);
+
+
+include_once dirname(dirname(__DIR__)) . DS . 'footer.php';

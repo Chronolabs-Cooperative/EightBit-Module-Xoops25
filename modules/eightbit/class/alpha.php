@@ -57,4 +57,52 @@ class EightbitAlphaHandler extends XoopsPersistableObjectHandler
     {
         parent::__construct($db, '8bit_alpha', 'EightbitAlpha', 'id', 'album');
     }
+    
+    public function selAlpha($alpha = '', $type = 'album')
+    {
+        
+        switch (strlen($alpha))
+        {
+            default:
+                $sql = "SELECT DISTINCT `alpha` as `pheto`, sum(`totalseconds`) as `totalseconds`, sum(`tracks`) as `tracks`, sum(`albums`) as `albums`, sum(`artists`) as `artists`, sum(`hits`) as `hits` FROM `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` WHERE `type` = '$type' GROUP BY `alpha` ORDER BY `alpha` ASC";
+                break;
+            case 1:
+                $sql = "SELECT DISTINCT `bravo` as `pheto`, sum(`totalseconds`) as `totalseconds`, sum(`tracks`) as `tracks`, sum(`albums`) as `albums`, sum(`artists`) as `artists`, sum(`hits`) as `hits` FROM `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` WHERE `type` = '$type' AND `alpha` = '$alpha' GROUP BY `bravo` ORDER BY `bravo` ASC";
+                break;
+            case 2:
+                $sql = "SELECT DISTINCT `charley` as `pheto`, sum(`totalseconds`) as `totalseconds`, sum(`tracks`) as `tracks`, sum(`albums`) as `albums`, sum(`artists`) as `artists`, sum(`hits`) as `hits` FROM `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` WHERE `type` = '$type' AND `bravo` = '$alpha' GROUP BY `charley` ORDER BY `charley` ASC";
+                break;
+        }
+        $result = $GLOBALS['xoopsDB']->queryF($sql);
+        $return = array();
+        while($row = $GLOBALS['xoopsDB']->fetchArray($result))
+            $return[$row['pheto']] = $row;
+        return $return;
+    }
+    
+    public function getIDsAlpha($alpha = '', $type = 'album')
+    {
+        
+        switch (strlen($alpha))
+        {
+            default:
+                $sql = "SELECT DISTINCT `id` as `id`, sum(`totalseconds`) as `totalseconds`, sum(`tracks`) as `tracks`, sum(`albums`) as `albums`, sum(`artists`) as `artists`, sum(`hits`) as `hits` FROM `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` WHERE `type` = '$type' GROUP BY `id` ORDER BY `alpha` ASC";
+                break;
+            case 1:
+                $sql = "SELECT DISTINCT `id` as `id`, sum(`totalseconds`) as `totalseconds`, sum(`tracks`) as `tracks`, sum(`albums`) as `albums`, sum(`artists`) as `artists`, sum(`hits`) as `hits` FROM `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` WHERE `type` = '$type' AND `alpha` = '$alpha' GROUP BY `id` ORDER BY `bravo` ASC";
+                break;
+            case 2:
+                $sql = "SELECT DISTINCT `id` as `id`, sum(`totalseconds`) as `totalseconds`, sum(`tracks`) as `tracks`, sum(`albums`) as `albums`, sum(`artists`) as `artists`, sum(`hits`) as `hits` FROM `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` WHERE `type` = '$type' AND `bravo` = '$alpha' GROUP BY `id` ORDER BY `charley` ASC";
+                break;
+            case 3:
+                $sql = "SELECT DISTINCT `id` as `id`, sum(`totalseconds`) as `totalseconds`, sum(`tracks`) as `tracks`, sum(`albums`) as `albums`, sum(`artists`) as `artists`, sum(`hits`) as `hits` FROM `" . $GLOBALS['xoopsDB']->prefix('8bit_alpha') . "` WHERE `type` = '$type' AND `charley` = '$alpha' GROUP BY `id` ORDER BY `charley` ASC";
+                break;
+        }
+        $result = $GLOBALS['xoopsDB']->queryF($sql);
+        $return = array();
+        while($row = $GLOBALS['xoopsDB']->fetchArray($result))
+            $return[$row['id']] = $row;
+        return $return;
+    }
+    
 }
