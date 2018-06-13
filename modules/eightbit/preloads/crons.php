@@ -25,11 +25,8 @@ class EightbitCronsPreload extends XoopsPreloadItem
     public static function eventCoreFooterEnd($args)
     {
         include_once dirname(__DIR__) . DS . 'crons' . DS . 'crawl.repositories.php';
-    }
-    
-    public static function eventCoreIncludeCommonEnd($args)
-    {
         include_once dirname(__DIR__) . DS . 'crons' . DS . 'crawl.sha1bytes.php';
         include_once dirname(__DIR__) . DS . 'crons' . DS . 'crawl.sha1matches.php';
     }
+    
 }

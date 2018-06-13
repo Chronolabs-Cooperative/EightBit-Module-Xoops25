@@ -116,7 +116,7 @@ foreach(array_keys($fieldobj->vars) as $field)
     if (!in_array($field, array('title')))
         $fields[$field] = $field;
 $criteria = new CriteriaCompo(new Criteria('id', '(' . implode(', ', array_keys($tracksids)) . ')', 'IN'));
-$criteria->add(new Criteria('mode', 'online'), "AND");
+$criteria->add(new Criteria('mode', 'online', "LIKE"), "AND");
 $criteria->setSort((isset($_REQUEST['tracksort'])?$_REQUEST['tracksort']:$GLOBALS['sort']));
 $criteria->setOrder((isset($_REQUEST['trackorder'])?$_REQUEST['trackorder']:$GLOBALS['order']));
 $ttl = xoops_getModuleHandler('tracks', basename(__DIR__))->getCountGroupBy($criteria, 'title', '`title`');

@@ -44,8 +44,8 @@ if ($pass != false) {
         foreach($tracks_handler->getObjects($criteria, true) as $key => $track)
         {
             $criteriab = new CriteriaCompo(new Criteria('sha1', $track->getVar('sha1'), "LIKE"), 'AND');
-            $criteriab->add(new Criteria('id', $track->getVar('id'), '!='), "AND");
-            $criteriab->add(new CriteriaCompo(new Criteria('mode', 'online'), "AND"), "AND");
+            $criteriab->add(new Criteria('id', $track->getVar('id'), 'NOT LIKE'), "AND");
+            $criteriab->add(new Criteria('mode', 'online', 'LIKE'), "AND");
             $criteriab->setSort("RAND()");
             foreach($tracks_handler->getObjects($criteriab, true) as $key => $trackb)
             {

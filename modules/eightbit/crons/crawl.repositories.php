@@ -280,6 +280,7 @@ foreach($repositories as $key => $repository)
             {
                 
                 $trackobj = $tracks_handler->create();
+                $trackobj->setVar('mode', 'online');
                 $trackobj->setVar('repoid', $repository->getVar('id'));
                 $trackobj->setVar('albumid', $albumid);
                 $trackobj->setVar('artistid', $artistid);

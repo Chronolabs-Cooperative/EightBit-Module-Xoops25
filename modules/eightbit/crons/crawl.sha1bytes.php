@@ -42,27 +42,22 @@ foreach($repositories as $key => $repository)
         $criteria = new CriteriaCompo(new Criteria('sha1', "", "LIKE"), 'OR');
         $criteria->add(new Criteria('bytes', '0'), "OR");
         $criteria->add(new CriteriaCompo(new Criteria('repoid', $repository->getVar('id')), "AND"), "AND");
-        $criteria->add(new CriteriaCompo(new Criteria('mode', 'online'), "AND"), "AND");
         $criteria->setSort("RAND()");
         $criteria->setLimit(15);
-        if ($tracks_handler->getCount($criteria) > 0)
+    
+        foreach($tracks_handler->getObjects($criteria, true) as $key => $track)
         {
-            
-            foreach($tracks_handler->getObjects($criteria, true) as $key => $track)
+            $data = eightbit_getURIData(sprintf($repository->getVar('raw'), substr($track->getVar('path'), 1) . "/" . urlencode($track->getVar('file'))), 360, 360);
+            if (strpos(strtolower($data), '404') > 0 || strpos(strtolower($data), 'whoops') > 0 || strpos(strtolower($data), 'not found') > 0)
             {
-                $data = eightbit_getURIData(sprintf($repository->getVar('raw'), substr($track->getVar('path'), 1) . "/" . urlencode($track->getVar('file'))));
-                if (strpos(strtolower($data), 'not found')>0)
-                {
-                    $track->setVar('mode', 'offline');
-                    $tracks_handler->insert($track, true);
-                } else {
-                    $track->setVar('sha1', sha1($data));
-                    $track->setVar('bytes', strlen($data));
-                    $track->setVar('mode', 'online');
-                    $tracks_handler->insert($track, true);
-                }
+                $track->setVar('mode', 'offline');
+                $tracks_handler->insert($track, true);
+            } else {
+                $track->setVar('sha1', sha1($data));
+                $track->setVar('bytes', strlen($data));
+                $track->setVar('mode', 'online');
+                $tracks_handler->insert($track, true);
             }
-        
         }
         $GLOBALS['xoopsDB']->queryF("COMMIT");
     }
