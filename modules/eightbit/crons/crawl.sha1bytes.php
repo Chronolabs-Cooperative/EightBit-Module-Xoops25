@@ -28,7 +28,7 @@ foreach($repositories as $key => $repository)
     if (!$read = XoopsCache::read('sha1bytes_'.md5($repository->getVar('id'))))
     {
         $pass = true;
-    } elseif( $read['time']>time() ) {
+    } elseif( $read['time'] <= time() ) {
         $pass = true;
     } else {
         $pass = false;

@@ -23,7 +23,7 @@ require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'class'.
 if (!$read = XoopsCache::read('sha1matches'))
 {
     $pass = true;
-} elseif( $read['time']>time() ) {
+} elseif( $read['time'] <= time() ) {
     $pass = true;
 } else {
     $pass = false;
