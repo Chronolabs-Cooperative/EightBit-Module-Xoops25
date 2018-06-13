@@ -118,14 +118,20 @@ $GLOBALS['xoopsTpl']->assign('artiststart', (isset($_REQUEST['artiststart'])?$_R
 $GLOBALS['xoopsTpl']->assign('artistlimit', (isset($_REQUEST['artistlimit'])?$_REQUEST['artistlimit']:$GLOBALS['limit']));
 $GLOBALS['xoopsTpl']->assign('artistsdigression', http_build_query(eightbit_RemoveFieldKeywords('artist', parse_str($_SERVER['QUERY_STRING']))));
      
+$titles = array();
+$fieldobj = xoops_getModuleHandler('tracks', basename(__DIR__))->create();
+foreach(array_keys($fieldobj->vars) as $field)
+    if (!in_array($field, array('title')))
+        $fields[$field] = $field;
 $criteria = new CriteriaCompo(new Criteria('id', '(' . implode(', ', array_keys($tracksids)) . ')', 'IN'));
 $criteria->add(new Criteria('mode', 'online'), "AND");
 $criteria->setSort((isset($_REQUEST['tracksort'])?$_REQUEST['tracksort']:$GLOBALS['sort']));
 $criteria->setOrder((isset($_REQUEST['trackorder'])?$_REQUEST['trackorder']:$GLOBALS['order']));
-$ttl = xoops_getModuleHandler('tracks', basename(__DIR__))->getCount($criteria);
+$ttl = xoops_getModuleHandler('tracks', basename(__DIR__))->getCountGroupBy($criteria, 'title', '`title`');
 $criteria->setStart((isset($_REQUEST['trackstart'])?$_REQUEST['trackstart']:$GLOBALS['start']));
 $criteria->setLimit((isset($_REQUEST['tracklimit'])?$_REQUEST['tracklimit']:$GLOBALS['limit']));
-foreach(xoops_getModuleHandler('tracks', basename(__DIR__))->getObjects($criteria, true) as $key => $object) {
+foreach(xoops_getModuleHandler('tracks', basename(__DIR__))->getObjectsGroupedBy($criteria, true, true, 'title', '`title`', array_reverse($fields)) as $key => $object) {
+    if (!in_array($object->getVar('title'), $titles) && $titles[$object->getVar('title')] = $object->getVar('title'))
     $GLOBALS['xoopsTpl']->append('tracks', array(   'title'         =>      $object->getVar('title'),
                                                     'album'         =>      xoops_getModuleHandler('albums', basename(__DIR__))->get($object->getVar('albumid'))->getVar('album'),
                                                     'artist'        =>      eightbit_getArtistsHTML($object->getVar('artistid'), xoops_getModuleHandler('artists', basename(__DIR__))->get($object->getVar('artistid'))->getVar('artist')),

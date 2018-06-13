@@ -67,6 +67,99 @@ class EightbitTracksHandler extends XoopsPersistableObjectHandler
         parent::__construct($db, '8bit_tracks', 'EightbitTracks', 'id', 'last');
     }
     
+    public function &getAllGroupBy(CriteriaElement $criteria = null, $fields = null, $asObject = true, $id_as_key = true, $groupby = '', $distinct = '')
+    {
+        if (is_array($fields) && count($fields) > 0) {
+            if (!in_array($this->keyName, $fields)) {
+                $fields[] = $this->keyName;
+            }
+            $select = '`' . implode('`, `', $fields) . '`';
+        } else {
+            $select = '*';
+        }
+        $limit = null;
+        $start = null;
+        $sql   = "SELECT {$groupby}, {$select} FROM `{$this->table}`";
+        if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
+            $sql .= ' ' . $criteria->renderWhere();
+            $sql .= " HAVING `{$groupby}` IN (SELECT DISTINCT `{$groupby}` FROM `{$this->table}` " . $criteria->renderWhere() . " GROUP BY `{$groupby}`)";
+            if ($sort = $criteria->getSort()) {
+                $sql .= " ORDER BY {$sort} " . $criteria->getOrder();
+                $orderSet = true;
+            }
+            $limit = $criteria->getLimit();
+            $start = $criteria->getStart();
+        }
+        $result = $this->db->query($sql, $limit, $start);
+        $ret    = array();
+        if ($asObject) {
+            while ($myrow = $this->db->fetchArray($result)) {
+                $object = $this->create(false);
+                $object->assignVars($myrow);
+                if ($id_as_key) {
+                    $ret[$myrow[$this->keyName]] = $object;
+                } else {
+                    $ret[] = $object;
+                }
+                unset($object);
+            }
+        } else {
+            $object = $this->create(false);
+            while ($myrow = $this->db->fetchArray($result)) {
+                $object->assignVars($myrow);
+                if ($id_as_key) {
+                    $ret[$myrow[$this->keyName]] = $object->getValues(array_keys($myrow));
+                } else {
+                    $ret[] = $object->getValues(array_keys($myrow));
+                }
+            }
+            unset($object);
+        }
+        
+        return $ret;
+    }
+    
+    /**
+     * retrieve objects from the database
+     *
+     * For performance consideration, getAll() is recommended
+     *
+     * @param  CriteriaElement $criteria  {@link CriteriaElement} conditions to be met
+     * @param  bool            $id_as_key use the ID as key for the array
+     * @param  bool            $as_object return an array of objects?
+     * @return array
+     */
+    public function &getObjectsGroupBy(CriteriaElement $criteria = null, $id_as_key = false, $as_object = true, $groupby = '', $distinct = '', $fields = array())
+    {
+        $objects =& $this->getAllGroupBy($criteria, $fields, $as_object, $id_as_key, $groupby, $distinct);
+        
+        return $objects;
+    }
+    
+    /**
+     * count objects matching a condition
+     *
+     * @param  CriteriaElement|CriteriaCompo $criteria {@link CriteriaElement} to match
+     * @return int    count of objects
+     */
+    public function getCountGroupBy(CriteriaElement $criteria = null, $groupby = '', $distinct = '')
+    {
+        $sql = "SELECT DISTINCT {$groupby}, COUNT(*) FROM `{$this->table}`";
+        if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
+            $sql .= ' ' . $criteria->renderWhere();
+            $sql .= " GROUP BY {$groupby}";
+            $sql .= " HAVING `{$groupby}` IN (SELECT DISTINCT `{$groupby}` FROM `{$this->table}` " . $criteria->renderWhere() . " GROUP BY `{$groupby}`)";
+        }
+        $result = $this->db->query($sql);
+        if (!$result) {
+            return 0;
+        }
+        $ret = 0;
+        while (list($id, $count) = $this->db->fetchRow($result)) {
+            $ret += $count;
+        }
+        return $ret;
+    }
     
     function insert(EightbitTracks $object, $force = true)
     {
